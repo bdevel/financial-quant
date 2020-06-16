@@ -1,0 +1,294 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ChangeListManager">
+    <list default="true" id="8b04244f-b59d-48c2-b91f-99a9df458d63" name="Default Changelist" comment="" />
+    <ignored path="$PROJECT_DIR$/classes/" />
+    <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="DefaultGradleProjectSettings">
+    <option name="testRunner" value="GRADLE" />
+    <option name="delegatedBuild" value="true" />
+  </component>
+  <component name="DepsLocalSettings">
+    <option name="repoId" value="" />
+    <option name="repoUrl" value="" />
+    <option name="projectSyncType">
+      <map>
+        <entry key="$PROJECT_DIR$/../hello-world" value="PREVIEW" />
+      </map>
+    </option>
+  </component>
+  <component name="FileEditorManager">
+    <leaf SIDE_TABS_SIZE_LIMIT_KEY="375">
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/project.clj">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="247">
+              <caret line="13" lean-forward="true" selection-start-line="13" selection-end-line="13" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/financial_quant/json.clj">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="418">
+              <caret line="22" lean-forward="true" selection-start-line="22" selection-end-line="22" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$USER_HOME$/.lein/profiles.clj">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="38">
+              <caret line="2" column="11" selection-start-line="2" selection-start-column="11" selection-end-line="2" selection-end-column="11" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/src/financial_quant/core.clj">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="133">
+              <caret line="7" column="19" lean-forward="true" selection-start-line="7" selection-start-column="19" selection-end-line="7" selection-end-column="19" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/financial_quant/yahoo_api.clj">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="285">
+              <caret line="15" column="32" selection-start-line="15" selection-start-column="32" selection-end-line="15" selection-end-column="32" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+    </leaf>
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Clojure Namespace" />
+      </list>
+    </option>
+  </component>
+  <component name="FindInProjectRecents">
+    <findStrings>
+      <find>:quote</find>
+    </findStrings>
+  </component>
+  <component name="IdeDocumentHistory">
+    <option name="CHANGED_PATHS">
+      <list>
+        <option value="$USER_HOME$/.lein/profiles.clj" />
+        <option value="$PROJECT_DIR$/src/financial_quant/json.clj" />
+        <option value="$PROJECT_DIR$/project.clj" />
+        <option value="$PROJECT_DIR$/src/financial_quant/yahoo_api.clj" />
+        <option value="$PROJECT_DIR$/src/financial_quant/core.clj" />
+      </list>
+    </option>
+  </component>
+  <component name="ProjectFrameBounds">
+    <option name="x" value="75" />
+    <option name="y" value="23" />
+    <option name="width" value="1605" />
+    <option name="height" value="1027" />
+  </component>
+  <component name="ProjectView">
+    <navigator proportions="" version="1">
+      <foldersAlwaysOnTop value="true" />
+    </navigator>
+    <panes>
+      <pane id="Scope" />
+      <pane id="ProjectPane">
+        <subPane>
+          <expand>
+            <path>
+              <item name="financial-quant" type="b2602c69:ProjectViewProjectNode" />
+              <item name="financial-quant" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="financial-quant" type="b2602c69:ProjectViewProjectNode" />
+              <item name="financial-quant" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="financial-quant" type="b2602c69:ProjectViewProjectNode" />
+              <item name="financial-quant" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="financial_quant" type="462c0819:PsiDirectoryNode" />
+            </path>
+          </expand>
+          <select />
+        </subPane>
+      </pane>
+      <pane id="PackagesPane" />
+    </panes>
+  </component>
+  <component name="PropertiesComponent">
+    <property name="WebServerToolWindowFactoryState" value="false" />
+    <property name="aspect.path.notification.shown" value="true" />
+    <property name="cursive.last.file.extension./Users/kanishkkumar/Workspace/Clojure/financial-quant/src" value="clj" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="nodejs_interpreter_path.stuck_in_default_project" value="undefined stuck path" />
+    <property name="nodejs_npm_path_reset_for_default_project" value="true" />
+  </component>
+  <component name="ReplState" timestamp="1591752220076">{:repl-history {:ide [], :local [{:command &quot;(+ 1 2)&quot;, :offset 7, :ns &quot;financial-quant.core&quot;} {:command &quot;(comment\n\n  )&quot;, :offset 13, :ns &quot;financial-quant.yahoo-api&quot;} {:command &quot;(def stock-api \&quot;https://query1.finance.yahoo.com/v7/finance/options/TSLA\&quot;)&quot;, :offset 74, :ns &quot;financial-quant.yahoo-api&quot;} {:command &quot;(client/get stock-api {:accept :json :query-params {:formatted \&quot;true\&quot;\n                                                    :lang \&quot;en-US\&quot;\n                                                    :region \&quot;US\&quot;\n                                                    :date \&quot;1591920000\&quot;}})&quot;, :offset 274, :ns &quot;financial-quant.yahoo-api&quot;} {:command &quot;(ns financial-quant.json\n  (:require [cheshire.core :as j]\n            [cheshire.generate :refer [add-encoder]]))\n\n(defn not-episolon\n  \&quot;Prevent using 31E9 format\&quot;\n  [v generator]\n  (.writeNumber generator\n                (clojure.string/replace (format \&quot;%.10f\&quot; v) #\&quot;0+$\&quot; \&quot;\&quot;)))\n\n\n(defn iso8601\n  \&quot;Format for JSON dates\&quot;\n  [v generator]\n  (.writeString generator\n                (str v)))\n\n(add-encoder java.lang.Double not-episolon)\n(add-encoder java.lang.Float not-episolon)\n(add-encoder java.time.LocalDateTime iso8601)\n(add-encoder org.joda.time.DateTime iso8601)\n\n\n(defn key-out\n  \&quot;Convers clojure keys to json keys\&quot;\n  [k]\n  (clojure.string/replace (name k) \&quot;-\&quot; \&quot;_\&quot;))\n\n(defn key-in\n  \&quot;converter for json keys to clojure keys\&quot;\n  [k]\n  (keyword (clojure.string/replace k \&quot;_\&quot; \&quot;-\&quot;)))\n\n\n(defn pretty\n  \&quot;\&quot;\n  [item]\n  (j/generate-string item {:key-fn key-out :pretty true}))\n\n\n(defn pprint\n  \&quot;\&quot;\n  [item]\n  (println (pretty item)))\n\n(defn dump\n  \&quot;\&quot;\n  [item]\n  (j/generate-string item {:key-fn key-out} )) ;; :value-fn val-out\n\n\n(defn parse\n  \&quot;\&quot;\n  [text]\n  ;;NOTE, this is reverse of\n  (j/parse-string text  key-in))\n\n\n(comment\n  (parse \&quot;{\\\&quot;foo_bar\\\&quot;: 13}\&quot;)\n  (dump {:foo-bar 123})\n  ;; Should add the E\n  (dump {:unix 1.5646258437873077E9}) ;; {\&quot;unix\&quot;:1564625843.7873077}\n\n  (dump {:created-at (clj-time.core/now)})\n\n  )\n\n&quot;, :offset 1318, :ns &quot;financial-quant.json&quot;} {:command &quot;(parse \&quot;{\\\&quot;foo_bar\\\&quot;: 13}\&quot;)&quot;, :offset 27, :ns &quot;financial-quant.json&quot;} {:command &quot;(select-keys {:a 1 :b 2} [:a])&quot;, :offset 30, :ns &quot;financial-quant.yahoo-api&quot;} {:command &quot;(select-keys {:a 1 :b 2} [:a :b])&quot;, :offset 33, :ns &quot;financial-quant.yahoo-api&quot;} {:command &quot;(defn fetch-option-chain [ticker]\n  (let [url (str \&quot;https://query1.finance.yahoo.com/v7/finance/options/\&quot; ticker)\n        response (client/get url {:accept :json :query-params {:formatted \&quot;true\&quot;\n                                                                     :lang \&quot;en-US\&quot;\n                                                                     :region \&quot;US\&quot;\n                                                                     :date \&quot;1591920000\&quot;}})\n        body (:body response)\n        data (json/parse body)\n        quote (get-in data [:optionChain :result 0 :quote])\n        filtered-quote (select-keys quote [:bid :ask])\n        options (get-in data [:optionChain :result 0 :options])\n        calls (get-in options [0 :calls])\n        puts (get-in options [0 :puts])\n        filtered-calls (mapv required-keys calls)\n        filtered-puts (mapv required-keys puts)\n        transformed-map (hash-map :quote filtered-quote :calls filtered-calls :puts filtered-puts)]\n    transformed-map))&quot;, :offset 992, :ns &quot;financial-quant.yahoo-api&quot;} {:command &quot;(fetch-option-chain \&quot;TSLA\&quot;)&quot;, :offset 27, :ns &quot;financial-quant.yahoo-api&quot;} {:command &quot;(defn -main\n  \&quot;I don't do a whole lot ... yet.\&quot;\n  [&amp; args]\n  (oz/start-server!))&quot;, :offset 80, :ns &quot;financial-quant.core&quot;}], :remote []}}</component>
+  <component name="RunDashboard">
+    <option name="ruleStates">
+      <list>
+        <RuleState>
+          <option name="name" value="ConfigurationTypeDashboardGroupingRule" />
+        </RuleState>
+        <RuleState>
+          <option name="name" value="StatusDashboardGroupingRule" />
+        </RuleState>
+      </list>
+    </option>
+  </component>
+  <component name="RunManager">
+    <configuration default="true" type="ClojureREPL" factoryName="Local" activateToolWindowBeforeRun="false">
+      <setting name="replType" value="NREPL" />
+      <setting name="execution" value="LEININGEN" />
+      <setting name="jvmArgs" value="" />
+      <setting name="parameters" value="" />
+      <setting name="workingDir" value="" />
+      <setting name="profiles" value="" />
+      <setting name="aliases" value="" />
+      <setting name="fixLineNumbers" value="false" />
+      <method v="2" />
+    </configuration>
+    <configuration default="true" type="ClojureREPL" factoryName="Remote" activateToolWindowBeforeRun="false">
+      <setting name="host" value="" />
+      <setting name="port" value="0" />
+      <setting name="replType" value="SOCKET" />
+      <setting name="configType" value="SPECIFY" />
+      <setting name="fixLineNumbers" value="false" />
+      <method v="2" />
+    </configuration>
+    <configuration name="financial-quant-repl" type="ClojureREPL" factoryName="Local" activateToolWindowBeforeRun="false">
+      <module name="financial-quant" />
+      <setting name="replType" value="NREPL" />
+      <setting name="execution" value="LEININGEN" />
+      <setting name="jvmArgs" value="" />
+      <setting name="parameters" value="" />
+      <setting name="workingDir" value="$PROJECT_DIR$" />
+      <setting name="profiles" value="" />
+      <setting name="aliases" value="" />
+      <setting name="fixLineNumbers" value="false" />
+      <method v="2" />
+    </configuration>
+  </component>
+  <component name="SvnConfiguration">
+    <configuration />
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="8b04244f-b59d-48c2-b91f-99a9df458d63" name="Default Changelist" comment="" />
+      <created>1591664409025</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1591664409025</updated>
+      <workItem from="1591664415093" duration="6555000" />
+      <workItem from="1591748835265" duration="1818000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TimeTrackingManager">
+    <option name="totallyTimeSpent" value="8373000" />
+  </component>
+  <component name="ToolWindowManager">
+    <frame x="75" y="23" width="1605" height="1027" extended-state="0" />
+    <editor active="true" />
+    <layout>
+      <window_info id="Designer" order="0" />
+      <window_info id="UI Designer" order="1" />
+      <window_info id="Favorites" order="2" side_tool="true" />
+      <window_info content_ui="combo" id="Project" order="3" sideWeight="0.4989083" visible="true" weight="0.24661945" />
+      <window_info id="Structure" order="4" side_tool="true" weight="0.25" />
+      <window_info anchor="bottom" id="Docker" order="0" show_stripe_button="false" />
+      <window_info anchor="bottom" id="Database Changes" order="1" />
+      <window_info anchor="bottom" id="Version Control" order="2" />
+      <window_info anchor="bottom" id="Terminal" order="3" />
+      <window_info anchor="bottom" id="Event Log" order="4" side_tool="true" />
+      <window_info anchor="bottom" id="Message" order="5" />
+      <window_info anchor="bottom" id="Find" order="6" />
+      <window_info anchor="bottom" id="Run" order="7" />
+      <window_info anchor="bottom" id="Debug" order="8" weight="0.4" />
+      <window_info anchor="bottom" id="Cvs" order="9" weight="0.25" />
+      <window_info anchor="bottom" id="Inspection" order="10" weight="0.4" />
+      <window_info anchor="bottom" id="TODO" order="11" />
+      <window_info active="true" anchor="bottom" id="REPL" order="12" sideWeight="0.5010917" side_tool="true" visible="true" weight="0.30567685" />
+      <window_info anchor="right" id="Palette" order="0" />
+      <window_info anchor="right" id="Maven" order="1" />
+      <window_info anchor="right" id="Leiningen" order="2" sideWeight="0.4989083" weight="0.3296845" />
+      <window_info anchor="right" id="Palette&#9;" order="3" />
+      <window_info anchor="right" id="Database" order="4" />
+      <window_info anchor="right" id="Commander" internal_type="SLIDING" order="5" type="SLIDING" weight="0.4" />
+      <window_info anchor="right" id="Ant Build" order="6" weight="0.25" />
+      <window_info anchor="right" content_ui="combo" id="Hierarchy" order="7" weight="0.25" />
+    </layout>
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="1" />
+  </component>
+  <component name="editorHistoryManager">
+    <entry file="file://$USER_HOME$/.lein/profiles.clj">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="38">
+          <caret line="2" column="11" selection-start-line="2" selection-start-column="11" selection-end-line="2" selection-end-column="11" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/financial_quant/json.clj">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="418">
+          <caret line="22" lean-forward="true" selection-start-line="22" selection-end-line="22" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/project.clj">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="247">
+          <caret line="13" lean-forward="true" selection-start-line="13" selection-end-line="13" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/financial_quant/yahoo_api.clj">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="285">
+          <caret line="15" column="32" selection-start-line="15" selection-start-column="32" selection-end-line="15" selection-end-column="32" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/financial_quant/core.clj">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="133">
+          <caret line="7" column="19" lean-forward="true" selection-start-line="7" selection-start-column="19" selection-end-line="7" selection-end-column="19" />
+        </state>
+      </provider>
+    </entry>
+  </component>
+  <component name="masterDetails">
+    <states>
+      <state key="ProjectJDKs.UI">
+        <settings>
+          <last-edited>1.8</last-edited>
+          <splitter-proportions>
+            <option name="proportions">
+              <list>
+                <option value="0.2" />
+              </list>
+            </option>
+          </splitter-proportions>
+        </settings>
+      </state>
+    </states>
+  </component>
+</project>
