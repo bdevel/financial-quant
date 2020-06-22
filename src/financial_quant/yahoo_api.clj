@@ -2,6 +2,18 @@
   (:require [clj-http.client :as client]
             [financial-quant.json :as json]))
 
+(def cache-store (atom {}))
+
+(comment
+  (swap! cache-store assoc "my-cache-key" {:new 123})
+
+  (get @cache-store "my-cache-key")
+
+  cache-store
+
+
+  (update {:x 3} :x inc))
+
 (defn required-keys [args]
   {:expiration (get-in args [:expiration :raw])
    :strike (get-in args [:strike :raw])
@@ -13,27 +25,74 @@
    :contract-symbol (get args :contractSymbol)
    :last-price (get-in args [:lastPrice :raw])})
 
-(defn fetch-option-chain [ticker]
-  (let [url (str "https://query1.finance.yahoo.com/v7/finance/options/" ticker)
-        response (client/get url {:accept :json :query-params {:formatted "true"
-                                                               :lang "en-US"
-                                                               :region "US"
-                                                               :date "1591920000"}})
-        body (:body response)
-        data (json/parse body)
-        quote (get-in data [:optionChain :result 0 :quote])
+;; (defn list-of-dates [ticker]
+;;   (let [url (str )]))
+
+(defn extract-option-chain [data]
+  (let [quote (get-in data [:optionChain :result 0 :quote])
         filtered-quote (select-keys quote [:bid :ask])
         options (get-in data [:optionChain :result 0 :options])
         calls (get-in options [0 :calls])
         puts (get-in options [0 :puts])
         filtered-calls (mapv required-keys calls)
         filtered-puts (mapv required-keys puts)
-        transformed-map {:quote filtered-quote :calls filtered-calls :puts filtered-puts}]
+        transformed-map {:quote filtered-quote
+                         :calls filtered-calls 
+                         :puts filtered-puts}]   
+    ;; (clojure.pprint/pprint data)
+    
     transformed-map))
 
+(defn fetch-option-data [ticker, date]
+  (let [url (str "https://query1.finance.yahoo.com/v7/finance/options/" ticker)
+        params {:formatted "true"
+                :lang "en-US"
+                :region "US"
+                :date date ;; Unix timestamp
+                }
+        cache-key (str ticker "-" date)
+        data (json/parse (or (get @cache-store cache-key)
+                             (let [response (client/get url {:accept :json :query-params params})
+                                   body (:body response)]
+                               (swap! cache-store assoc cache-key body)
+                               (println "fetching:" url params)
+                               body)))]
+     data))
+
+(defn full-option-chain
+  ([ticker] (full-option-chain ticker 20))
+  ([ticker, exp-count]
+   (let [origin (fetch-option-data ticker nil) 
+         exp-dates (take exp-count (next (get-in origin [:optionChain :result 0 :expirationDates])))
+         _ (println exp-dates)
+         _ (println (keys origin))
+         datas (into [(extract-option-chain origin)] 
+                     (for [date exp-dates]
+                       (extract-option-chain (fetch-option-data ticker date))))] 
+     (reduce (fn [acc, item] 
+               (assoc acc
+                      ;; :quote (:quote acc)
+                      :calls (concat (:calls acc) (:calls item))
+                      :puts (concat (:puts acc) (:puts item))
+                      )) 
+             datas ))))
 
 ;;
 (comment
+  (for [x (range 0 1)]
+    (* x 2))
+  (reduce (fn [acc, item] 
+            (assoc acc
+                   ;; :quote (:quote acc)
+                   :calls (concat (:calls acc) (:calls item))
+                   :puts (concat (:puts acc) (:puts item))
+                   )) 
+          [{:quote {:price 10} :calls [{:strike 5} ]}
+           {:quote {:price 12} :calls [{:strike 10} ]}] )
 
+
+  (fetch-option-chain "TSLA" nil)
+  (def full (full-option-chain "TSLA"))
+  (count (:calls full))
   (fetch-option-chain "TSLA"))
 

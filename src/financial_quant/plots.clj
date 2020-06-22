@@ -1,17 +1,45 @@
 (ns financial-quant.plots
-  (:require [oz.core :as oz]))
+  (:require [oz.core :as oz]
+            [financial-quant.yahoo-api :as yahoo-api]))
 
-(defn play-data [& names]
-  (for [n names
-        i (range 20)]
-    {:time i :item n :quantity (+ (Math/pow (* i (count n)) 0.8) (rand-int (count n)))}))
+(def sample-data (yahoo-api/full-option-chain "TSLA"))
 
-(def line-plot
-  {:data {:values (play-data "monkey" "slipper" "broom")}
-   :encoding {:x {:field "time" :type "quantitative"}
-              :y {:field "quantity" :type "quantitative"}
-              :color {:field "item" :type "nominal"}}
-   :mark "line"})
+(defn sample-plot-values [api-data]
+  (map 
+   #(identity {
+               :open-interest (get % :open-interest) 
+               :strike (get % :strike)
+               :expiration (get % :expiration)
+               :last-price (get % :last-price)
+               :contract-symbol (get % :contract-symbol)
+               }) 
+   (:calls api-data)))
 
-;; Render the plot
-(oz/view! line-plot)
+(def sample-plot 
+ {
+  :$schema "https://vega.github.io/schema/vega-lite/v4.json",
+  :data {:values (sample-plot-values sample-data)},
+  :mark "rect",
+  :encoding {
+    :y {:field :strike
+, :type "nominal"},
+    :x {:field :expiration, :type "ordinal"},
+    :color {:aggregate "mean", :field :open-interest, :type "quantitative"}
+  },
+  :config {
+
+    :axis {:grid true, :tickBand "extent"}
+  }
+})
+
+
+(oz/view! sample-plot)
+
+
+(comment
+  (sample-plot-values sample-data)
+
+  (map :expiration (sample-plot-values sample-data))
+  (get sample-data :calls))
+
+
