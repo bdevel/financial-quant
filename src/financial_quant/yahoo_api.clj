@@ -29,7 +29,8 @@
 ;;   (let [url (str )]))
 
 (defn extract-option-chain [data]
-  (let [quote (get-in data [:optionChain :result 0 :quote])
+  (let [result (get-in data [:optionChain :result 0 ])
+        quote (:quote result)
         filtered-quote (select-keys quote [:bid :ask])
         options (get-in data [:optionChain :result 0 :options])
         calls (get-in options [0 :calls])
@@ -37,6 +38,8 @@
         filtered-calls (mapv required-keys calls)
         filtered-puts (mapv required-keys puts)
         transformed-map {:quote filtered-quote
+                         :strikes (:strikes result)
+                         :expirations (:expirationDates result)
                          :calls filtered-calls 
                          :puts filtered-puts}]   
     ;; (clojure.pprint/pprint data)
@@ -77,6 +80,19 @@
                       )) 
              datas ))))
 
+(defn limit-strikes [data, limit]
+  (let [strikes (:strikes data)
+        bid (get-in data [:quote :bid])
+        upper-stack (take-last limit (take-while #(<= % bid) strikes))
+        lower-stack (take limit (drop-while #(<= % bid) strikes))
+        only-strikes (set (concat upper-stack lower-stack))
+        filtered-calls (filter #(contains? only-strikes (:strike %)) (:calls data))
+        filtered-puts (filter #(contains? only-strikes (:strike %)) (:puts data))]
+    (println "lower-strike" lower-stack "\n upper-stack" upper-stack)
+    (assoc data 
+           :calls filtered-calls 
+           :puts filtered-puts)))
+
 ;;
 (comment
   (for [x (range 0 1)]
@@ -94,5 +110,14 @@
   (fetch-option-chain "TSLA" nil)
   (def full (full-option-chain "TSLA"))
   (count (:calls full))
-  (fetch-option-chain "TSLA"))
+  (fetch-option-chain "TSLA")
+  
+  (-> (full-option-chain "TSLA" )
+      (limit-strikes 10)
+      :calls
+      (#(map :strike %))
+      distinct
+      count)
+
+)
 
