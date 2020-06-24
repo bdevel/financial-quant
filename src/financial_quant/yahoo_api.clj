@@ -2,7 +2,7 @@
   (:require [clj-http.client :as client]
             [financial-quant.json :as json]))
 
-(def cache-store (atom {}))
+(defonce cache-store (atom {}))
 
 (comment
   (swap! cache-store assoc "my-cache-key" {:new 123})
@@ -31,7 +31,7 @@
 (defn extract-option-chain [data]
   (let [result (get-in data [:optionChain :result 0 ])
         quote (:quote result)
-        filtered-quote (select-keys quote [:bid :ask])
+        filtered-quote (select-keys quote [:bid :ask :shortName :symbol])
         options (get-in data [:optionChain :result 0 :options])
         calls (get-in options [0 :calls])
         puts (get-in options [0 :puts])
@@ -67,8 +67,6 @@
   ([ticker, exp-count]
    (let [origin (fetch-option-data ticker nil) 
          exp-dates (take exp-count (next (get-in origin [:optionChain :result 0 :expirationDates])))
-         _ (println exp-dates)
-         _ (println (keys origin))
          datas (into [(extract-option-chain origin)] 
                      (for [date exp-dates]
                        (extract-option-chain (fetch-option-data ticker date))))] 
@@ -88,7 +86,6 @@
         only-strikes (set (concat upper-stack lower-stack))
         filtered-calls (filter #(contains? only-strikes (:strike %)) (:calls data))
         filtered-puts (filter #(contains? only-strikes (:strike %)) (:puts data))]
-    (println "lower-strike" lower-stack "\n upper-stack" upper-stack)
     (assoc data 
            :calls filtered-calls 
            :puts filtered-puts)))
@@ -107,7 +104,8 @@
            {:quote {:price 12} :calls [{:strike 10} ]}] )
 
 
-  (fetch-option-chain "TSLA" nil)
+  (fetch-option-data "TSLA" nil)
+  
   (def full (full-option-chain "TSLA"))
   (count (:calls full))
   (fetch-option-chain "TSLA")
@@ -120,4 +118,3 @@
       count)
 
 )
-
