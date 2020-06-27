@@ -1,18 +1,8 @@
 (ns financial-quant.yahoo-api
   (:require [clj-http.client :as client]
-            [financial-quant.json :as json]))
-
-(defonce cache-store (atom {}))
-
-(comment
-  (swap! cache-store assoc "my-cache-key" {:new 123})
-
-  (get @cache-store "my-cache-key")
-
-  cache-store
-
-
-  (update {:x 3} :x inc))
+            [financial-quant.json :as json]
+            [financial-quant.cache :as cache]
+            ))
 
 (defn required-keys [args]
   {:expiration (get-in args [:expiration :raw])
@@ -53,11 +43,12 @@
                 :region "US"
                 :date date ;; Unix timestamp
                 }
-        cache-key (str ticker "-" date)
-        data (json/parse (or (get @cache-store cache-key)
+        cache-key (str ticker "-" date ".json")
+        data (json/parse (or (cache/lookup-today cache-key)
                              (let [response (client/get url {:accept :json :query-params params})
                                    body (:body response)]
-                               (swap! cache-store assoc cache-key body)
+                               ;;(write-in-db (assoc {} cache-key body))
+                               (cache/write-daily cache-key body)
                                (println "fetching:" url params)
                                body)))]
      data))

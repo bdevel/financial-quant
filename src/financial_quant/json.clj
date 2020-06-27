@@ -46,14 +46,16 @@
 (defn dump
   ""
   [item]
-  (j/generate-string item {:key-fn key-out} )) ;; :value-fn val-out
+  (j/generate-string item {:key-fn key-out}
+ )) ;; :value-fn val-out
 
 
 (defn parse
   ""
   [text]
-  ;;NOTE, this is reverse of
-  (j/parse-string text  key-in))
+  (if (clojure.string/blank? text)
+    {} ;;NOTE, this is reverse of
+    (j/parse-string text  key-in)))
 
 
 (comment
@@ -63,6 +65,7 @@
   (dump {:unix 1.5646258437873077E9}) ;; {"unix":1564625843.7873077}
 
   (dump {:created-at (clj-time.core/now)})
+  (j/parse-string "{\"foo\":\"bar\"}" true)
 
   )
 

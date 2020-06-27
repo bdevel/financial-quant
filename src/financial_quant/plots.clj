@@ -25,6 +25,7 @@
         bid       (get-in api-data [:quote :bid])
         timeunit (if (> (count (distinct all-exp)) 20)
                    "yearmonthday"
+
                    "yearmonth")
         ]
    (println "n expr" (count (distinct all-exp)))
@@ -65,7 +66,6 @@
 
 (def sample-data (-> (yahoo-api/full-option-chain "GOOG")
                      (yahoo-api/limit-strikes 50)))
-
 
 
 (oz/view! (make-open-interest-heatmap sample-data))
