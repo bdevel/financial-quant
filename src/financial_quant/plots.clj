@@ -1,6 +1,8 @@
 (ns financial-quant.plots
   (:require [oz.core :as oz]
-            [financial-quant.yahoo-api :as yahoo-api]))
+            [financial-quant.yahoo-api :as yahoo-api]
+            [financial-quant.historic-quote :as historic]
+            ))
 
 
 (defn plot-values [api-data]
@@ -14,19 +16,19 @@
                 }) 
     (:calls api-data)))
 
+
 (defn make-open-interest-heatmap
   ""
   [api-data]
-  (let [plot-data (plot-values sample-data)
+  (let [plot-data (plot-values api-data)
         all-exp   (map :expiration plot-data)
         min-exp   (apply min all-exp)
         max-exp   (apply max all-exp)
         n-strikes (count (distinct (map :strike plot-data)))
         bid       (get-in api-data [:quote :bid])
-        timeunit (if (> (count (distinct all-exp)) 20)
-                   "yearmonthday"
-
-                   "yearmonth")
+        timeunit  (if (> (count (distinct all-exp)) 20)
+                    "yearmonthday"
+                    "yearmonth")
         ]
    (println "n expr" (count (distinct all-exp)))
     {
@@ -64,11 +66,79 @@
      }))
 
 
-(def sample-data (-> (yahoo-api/full-option-chain "GOOG")
-                     (yahoo-api/limit-strikes 50)))
+(defn make-historic-quote-plot
+  ""
+  [quotes]
+  (let [_ nil]
+    ;; (*  1000 (get % :expiration))
+    {
+     :$schema  "https://vega.github.io/schema/vega-lite/v4.json",
+     :width    800
+     :height   800
+     :title    (str "Historic Quotes " ) ;; (get-in api-data [:quote :symbol]))
+     :data     {:values quotes}
+     :encoding {
+                :x     {
+                        :field :timestamp
+                        :type  "temporal"
+                        :title "Date in 2009"
+                        :axis  {
+                                :format     "%m/%d",
+                                :labelAngle -45,
+                                :title      "The title"
+                                }
+                        },
+                :color {
+                        :condition {
+                                    :test  "datum.open < datum.close"
+                                    :value "#06982d"
+                                    },
+                        :value     "#ae1325"
+                        }
+                },
+     :layer    [
+                {
+                 :mark     "rule",
+                 :encoding {
+                            :y {
+                                :field :low
+                                :type  "quantitative",
+                                :scale {:zero false},
+                                :title "Price"
+
+                                },
+                            :y2 {:field :high}
+                            }
+                 },
+                {
+                 :mark     "bar",
+                 :encoding {
+                            :y  {:field :open :type "quantitative"},
+                            :y2 {:field :close}
+                            }
+                 }
+                ]
+     
+     }))
 
 
-(oz/view! (make-open-interest-heatmap sample-data))
+
+
+
+
+(comment
+  (def open-interest-data
+    (-> (yahoo-api/full-option-chain "TSLA")
+        (yahoo-api/limit-strikes 50)))
+  (oz/view! (make-open-interest-heatmap open-interest-data))
+
+  
+  )
+
+(comment 
+  (oz/view! (make-historic-quote-plot (historic/extract-historic-quotes (historic/fetch-historic-quote-data "TSLA" "123123123"))))
+
+  )
 
 
 (comment

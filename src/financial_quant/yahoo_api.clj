@@ -81,31 +81,103 @@
            :calls filtered-calls 
            :puts filtered-puts)))
 
-;;
+
+;;================================================================================
+;; New stuff 2020-06-03
+
+
+(defn accumulate-open-interest
+  "Will update :calls with :total-open-interest which is the sum of all previous :expirations where :strike price is greater than the current item."
+  [data]
+  )
+
 (comment
-  (for [x (range 0 1)]
-    (* x 2))
-  (reduce (fn [acc, item] 
-            (assoc acc
-                   ;; :quote (:quote acc)
-                   :calls (concat (:calls acc) (:calls item))
-                   :puts (concat (:puts acc) (:puts item))
-                   )) 
-          [{:quote {:price 10} :calls [{:strike 5} ]}
-           {:quote {:price 12} :calls [{:strike 10} ]}] )
-
-
-  (fetch-option-data "TSLA" nil)
-  
-  (def full (full-option-chain "TSLA"))
-  (count (:calls full))
-  (fetch-option-chain "TSLA")
-  
+  ;; Goal:
   (-> (full-option-chain "TSLA" )
       (limit-strikes 10)
-      :calls
-      (#(map :strike %))
-      distinct
-      count)
+      (accumulate-open-interest)
+      )
+  )
+
+
+(comment
+  ;; (def full (full-option-chain "TSLA"))
+  ;; (count (:calls full))
+  ;; (fetch-option-chain "TSLA")
+
+  ;; Get example call item
+  (clojure.pprint/pprint (first (-> (full-option-chain "TSLA" )
+                                    (limit-strikes 10)
+                                    :calls
+                                    )))
+
+
+  (def samples [{
+                :strike        100
+                :expiration    1
+                :open-interest 10
+                 }
+                {
+                 :strike        100
+                 :expiration    2
+                 :open-interest 11
+                 }
+                {
+                 :strike        100
+                 :expiration    3
+                 :open-interest 12
+                 }
+                
+                {
+                 :strike        200
+                 :expiration    1
+                 :open-interest 20
+                 }
+                {
+                 :strike        200
+                 :expiration    2
+                 :open-interest 21
+                 }
+                {
+                 :strike        200
+                 :expiration    2
+                 :open-interest 22
+                 }])
+
+
+  (defn accumulate-open-interest
+    ""
+    [contracts]
+    ;; NOTE, This has an issue that it is only taking the previous :open-interest
+    ;; and it should be taking the previous items :total-open-interest
+    (loop [items  (sort-by :expiration contracts)
+           out []]
+      (let [;;[i n & others] items
+            i        (first items)
+            n        (second items)
+            others   (next items)
+            new-item (assoc i
+                            :total-open-interest
+                            (+ (:open-interest i 0)
+                               (:open-interest n 0)))
+            new-out  (conj out new-item)]
+        (println "Working on " i " + " n)
+        (if (empty? others)
+          (sort-by :expiration new-out)
+          (recur others new-out)))))
+
+  (accumulate-open-interest samples)
+
+  ;; example making a hashmap from a vector.
+  ;;(into {} [[:a 1] [:b 2]])
+  
+  (let [groups (group-by :strike samples)
+        v1 (into {} (map #(vector %1 (accumulate-open-interest %2))
+                         (keys groups) (vals groups)))]
+    
+    (clojure.pprint/pprint samples)
+    (clojure.pprint/pprint v1)
+    )
+
 
 )
