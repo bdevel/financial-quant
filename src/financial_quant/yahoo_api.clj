@@ -81,15 +81,42 @@
            :calls filtered-calls 
            :puts filtered-puts)))
 
+(defn acc-open-interest
+    ""
+    [contracts]
+    (let [sorted-items (sort-by :expiration contracts)
+          acc-score    (reduce 
+                         (fn [a i] 
+                           (conj a (assoc i :total-open-interest (+ (:total-open-interest (last a) 0)
+                                                                    (:open-interest i 0))))) 
+                         [] 
+                         sorted-items)]
+      acc-score))
+  
+  (defn acc-open-interest-by-expiration
+    ""
+    [contracts]
+    (let [sorted-items (sort-by :strike contracts)
+          acc-score    (reduce 
+                         (fn [a i] 
+                           (conj a (assoc i :total-open-interest (+ (:total-open-interest (last a) 0)
+                                                                    (:total-open-interest i 0))))) 
+                         [] 
+                         sorted-items)]
+      acc-score))
+
 
 ;;================================================================================
 ;; New stuff 2020-06-03
-
-
 (defn accumulate-open-interest
   "Will update :calls with :total-open-interest which is the sum of all previous :expirations where :strike price is greater than the current item."
   [data]
-  )
+  (let [calls (:calls data)
+        groups (group-by :strike calls)
+        v1     (apply concat [] (map acc-open-interest (vals groups)))
+        v2     (apply concat [] (map acc-open-interest-by-expiration (vals (group-by :expiration v1))))]
+    
+    (assoc data :calls v2)))
 
 (comment
   ;; Goal:
@@ -100,84 +127,81 @@
   )
 
 
-(comment
-  ;; (def full (full-option-chain "TSLA"))
-  ;; (count (:calls full))
-  ;; (fetch-option-chain "TSLA")
+;; (comment
+;;   ;; (def full (full-option-chain "TSLA"))
+;;   ;; (count (:calls full))
+;;   ;; (fetch-option-chain "TSLA")
 
-  ;; Get example call item
-  (clojure.pprint/pprint (first (-> (full-option-chain "TSLA" )
-                                    (limit-strikes 10)
-                                    :calls
-                                    )))
+;;   ;; Get example call item
+;;   (clojure.pprint/pprint (first (-> (full-option-chain "TSLA" )
+;;                                     (limit-strikes 10)
+;;                                     :calls
+;;                                     )))
 
 
-  (def samples [{
-                :strike        100
-                :expiration    1
-                :open-interest 10
-                 }
-                {
-                 :strike        100
-                 :expiration    2
-                 :open-interest 11
-                 }
-                {
-                 :strike        100
-                 :expiration    3
-                 :open-interest 12
-                 }
+;;   (def samples [{
+;;                 :strike        100
+;;                 :expiration    1
+;;                 :open-interest 10
+;;                  }
+;;                 {
+;;                  :strike        100
+;;                  :expiration    2
+;;                  :open-interest 11
+;;                  }
+;;                 {
+;;                  :strike        100
+;;                  :expiration    3
+;;                  :open-interest 12
+;;                  }
                 
-                {
-                 :strike        200
-                 :expiration    1
-                 :open-interest 20
-                 }
-                {
-                 :strike        200
-                 :expiration    2
-                 :open-interest 21
-                 }
-                {
-                 :strike        200
-                 :expiration    2
-                 :open-interest 22
-                 }])
+;;                 {
+;;                  :strike        200
+;;                  :expiration    1
+;;                  :open-interest 20
+;;                  }
+;;                 {
+;;                  :strike        200
+;;                  :expiration    2
+;;                  :open-interest 21
+;;                  }
+;;                 {
+;;                  :strike        200
+;;                  :expiration    2
+;;                  :open-interest 22
+;;                  }])
 
 
-  (defn accumulate-open-interest
-    ""
-    [contracts]
-    ;; NOTE, This has an issue that it is only taking the previous :open-interest
-    ;; and it should be taking the previous items :total-open-interest
-    (loop [items  (sort-by :expiration contracts)
-           out []]
-      (let [;;[i n & others] items
-            i        (first items)
-            n        (second items)
-            others   (next items)
-            new-item (assoc i
-                            :total-open-interest
-                            (+ (:open-interest i 0)
-                               (:open-interest n 0)))
-            new-out  (conj out new-item)]
-        (println "Working on " i " + " n)
-        (if (empty? others)
-          (sort-by :expiration new-out)
-          (recur others new-out)))))
+;;   #_(defn accumulate-open-interest
+;;     ""
+;;     [contracts]
+;;     ;; NOTE, This has an issue that it is only taking the previous :open-interest
+;;     ;; and it should be taking the previous items :total-open-interest
+;;     (loop [items  (sort-by :expiration contracts)
+;;            out []]
+;;       (let [;;[i n & others] items
+;;             i        (first items)
+;;             n        (second items)
+;;             others   (next items)
+;;             new-item (assoc i 
+;;                             :total-open-interest (+ (:open-interest i 0)
+;;                                                     (:open-interest n 0))
+;;                             new-out)  (conj out new-item)]
+;;         (println "Working on " i " + " n)
+;;         (if (empty? others)
+;;           (sort-by :expiration new-out)
+;;           (recur others new-out)))))
 
-  (accumulate-open-interest samples)
+;;   (println (accumulate-open-interest samples))
 
-  ;; example making a hashmap from a vector.
-  ;;(into {} [[:a 1] [:b 2]])
   
-  (let [groups (group-by :strike samples)
-        v1 (into {} (map #(vector %1 (accumulate-open-interest %2))
-                         (keys groups) (vals groups)))]
-    
-    (clojure.pprint/pprint samples)
-    (clojure.pprint/pprint v1)
-    )
 
-
-)
+;;   (clojure.pprint/pprint (acc-open-interest samples))
+;;   ;; example making a hashmap from a vector.
+;;   ;;(into {} [[:a 1] [:b 2]])
+  
+;;   (let [groups (group-by :strike samples)
+;;         v1 (apply concat [] (map acc-open-interest (vals groups)))
+;;         v2 (apply concat [] (map acc-open-interest-by-expiration (vals (group-by :expiration v1))))]
+;;     (clojure.pprint/pprint v1)
+;;     (clojure.pprint/pprint v2)))

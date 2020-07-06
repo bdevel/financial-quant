@@ -17,7 +17,7 @@
     (:calls api-data)))
 
 
-(defn make-open-interest-heatmap
+(defn make-total-open-interest-heatmap
   ""
   [api-data]
   (let [plot-data (plot-values api-data)
@@ -35,7 +35,7 @@
      :$schema "https://vega.github.io/schema/vega-lite/v4.json",
      :width 800
      :height 800
-     :title (str "Option Open Interest for " (get-in api-data [:quote :symbol]))
+     :title (str "Option Total Open Interest for " (get-in api-data [:quote :symbol]))
      :layer   [{
                 :data     {:values plot-data},
                 :mark     "rect",
@@ -45,7 +45,7 @@
 
                            :x     {:field :expiration, :type "temporal" :timeUnit timeunit :bin false :axis {:labelAngle 90 :title "Expiration" }},
                            
-                           :color {:aggregate "sum", :field :open-interest, :type "quantitative"}
+                           :color {:aggregate "sum", :field :total-open-interest, :type "quantitative"}
                            },
                 :config   {
                            :axis {:grid true, :tickBand "extent"}
@@ -129,8 +129,9 @@
 (comment
   (def open-interest-data
     (-> (yahoo-api/full-option-chain "TSLA")
-        (yahoo-api/limit-strikes 50)))
-  (oz/view! (make-open-interest-heatmap open-interest-data))
+        (yahoo-api/limit-strikes 50)
+        (yahoo-api/accumulate-open-interest)))
+  (oz/view! (make-total-open-interest-heatmap open-interest-data))
 
   
   )
