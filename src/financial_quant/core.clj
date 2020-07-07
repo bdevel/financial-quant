@@ -8,6 +8,5 @@
   (oz/start-server!))
 
 (comment
-
-  (+ 1 2)
-  (-main))
+  (-main)
+  )

@@ -82,32 +82,50 @@
            :puts filtered-puts)))
 
 (defn acc-open-interest
-    ""
+    "Add up interest by strike price"
     [contracts]
-    (let [sorted-items (sort-by :expiration contracts)
+  (let [sorted-items (reverse (sort-by :expiration contracts))
           acc-score    (reduce 
                          (fn [a i] 
-                           (conj a (assoc i :total-open-interest (+ (:total-open-interest (last a) 0)
-                                                                    (:open-interest i 0))))) 
-                         [] 
-                         sorted-items)]
-      acc-score))
-  
-  (defn acc-open-interest-by-expiration
-    ""
-    [contracts]
-    (let [sorted-items (sort-by :strike contracts)
-          acc-score    (reduce 
-                         (fn [a i] 
-                           (conj a (assoc i :total-open-interest (+ (:total-open-interest (last a) 0)
-                                                                    (:total-open-interest i 0))))) 
+                           (conj a (assoc i :total-open-interest (+ (or (:total-open-interest (last a)) 0)
+                                                                    (or (:open-interest i) 0))))) 
                          [] 
                          sorted-items)]
       acc-score))
 
+(defn fill-strikes-with-prev
+  "Assuming all contracts have the same expiration, start at lowest strike, if a strike missing then use the previous value of attr to fill gap."
+  [contracts all-strikes attr]
+  (let [;;sorted-items (sort-by :strike contracts)
+        strike-table (reduce (fn [a i] (assoc a (:strike i) i)) 
+                             {}
+                             contracts)
+        filled-table (reduce (fn [a s]
+                               (assoc a s (get strike-table s))) 
+                             {}
+                             all-strikes)
+        ]
+    nil))
 
-;;================================================================================
-;; New stuff 2020-06-03
+(comment
+  (fill-strikes-with-prev [{:strike 1 :v 10}
+                           {:strike 2 :v 20}]
+                          [1 2 3 4])
+  )
+
+(defn acc-open-interest-by-expiration
+  "Add up columns for heatmap"
+  [contracts]
+  (let [sorted-items (sort-by :strike contracts) ;; for :calls, sort ascending
+        acc-score    (reduce 
+                       (fn [a i] 
+                         (conj a (assoc i :total-open-interest (+ (or (:total-open-interest (last a)) 0)
+                                                                  (or (:total-open-interest i) 0))))) 
+                       [] 
+                       sorted-items)]
+    acc-score))
+
+
 (defn accumulate-open-interest
   "Will update :calls with :total-open-interest which is the sum of all previous :expirations where :strike price is greater than the current item."
   [data]
@@ -127,7 +145,7 @@
   )
 
 
-;; (comment
+(comment
 ;;   ;; (def full (full-option-chain "TSLA"))
 ;;   ;; (count (:calls full))
 ;;   ;; (fetch-option-chain "TSLA")
@@ -139,69 +157,58 @@
 ;;                                     )))
 
 
-;;   (def samples [{
-;;                 :strike        100
-;;                 :expiration    1
-;;                 :open-interest 10
-;;                  }
-;;                 {
-;;                  :strike        100
-;;                  :expiration    2
-;;                  :open-interest 11
-;;                  }
-;;                 {
-;;                  :strike        100
-;;                  :expiration    3
-;;                  :open-interest 12
-;;                  }
+  (def samples [{
+                :strike        100
+                :expiration    1
+                :open-interest 10
+                 }
+                {
+                 :strike        100
+                 :expiration    2
+                 :open-interest 11
+                 }
+                {
+                 :strike        100
+                 :expiration    3
+                 :open-interest 12
+                 }
                 
-;;                 {
-;;                  :strike        200
-;;                  :expiration    1
-;;                  :open-interest 20
-;;                  }
-;;                 {
-;;                  :strike        200
-;;                  :expiration    2
-;;                  :open-interest 21
-;;                  }
-;;                 {
-;;                  :strike        200
-;;                  :expiration    2
-;;                  :open-interest 22
-;;                  }])
+                {
+                 :strike        200
+                 :expiration    1
+                 :open-interest 20
+                 }
+                {
+                 :strike        200
+                 :expiration    2
+                 :open-interest 21
+                 }
+                {
+                 :strike        200
+                 :expiration    3
+                 :open-interest 22
+                 }])
 
-
-;;   #_(defn accumulate-open-interest
-;;     ""
-;;     [contracts]
-;;     ;; NOTE, This has an issue that it is only taking the previous :open-interest
-;;     ;; and it should be taking the previous items :total-open-interest
-;;     (loop [items  (sort-by :expiration contracts)
-;;            out []]
-;;       (let [;;[i n & others] items
-;;             i        (first items)
-;;             n        (second items)
-;;             others   (next items)
-;;             new-item (assoc i 
-;;                             :total-open-interest (+ (:open-interest i 0)
-;;                                                     (:open-interest n 0))
-;;                             new-out)  (conj out new-item)]
-;;         (println "Working on " i " + " n)
-;;         (if (empty? others)
-;;           (sort-by :expiration new-out)
-;;           (recur others new-out)))))
-
-;;   (println (accumulate-open-interest samples))
-
+  (let [v (reverse (sort-by :strike (:calls (accumulate-open-interest {:calls samples}))))
+        vg (vals (group-by :strike v)) #_(map #(:total-open-interest %) )
+        vv (map (fn [g]
+                  ;;(map #(select-keys % [:strike :total-open-interest :expiration]) g)
+                  (map :total-open-interest g))
+                vg)]
+    (println "=====================")
+    (run! println vv))
   
 
-;;   (clojure.pprint/pprint (acc-open-interest samples))
-;;   ;; example making a hashmap from a vector.
-;;   ;;(into {} [[:a 1] [:b 2]])
+  ;; samples:
+  [20 21 22
+   10 11 12]
+
+  ;; acc rows, right to left
+  [63 43 22
+   33 23 12]
+
+  ;; then, acc cols bottom to top for :calls, goal:
+  [96 66 34
+   33 23 12]
   
-;;   (let [groups (group-by :strike samples)
-;;         v1 (apply concat [] (map acc-open-interest (vals groups)))
-;;         v2 (apply concat [] (map acc-open-interest-by-expiration (vals (group-by :expiration v1))))]
-;;     (clojure.pprint/pprint v1)
-;;     (clojure.pprint/pprint v2)))
+  )
