@@ -13,4 +13,5 @@ pom.xml.asc
 .idea/
 .DS_Store
 *.xml
-cache
+cache*.log
+*.log

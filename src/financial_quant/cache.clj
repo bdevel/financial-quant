@@ -7,7 +7,6 @@
 (defmacro nil-on-exception [& forms]
   `(try ~@forms
         (catch Exception e# 
-          (println "ERROR: " (.getMessage e#))
           nil)))
 
 (comment 

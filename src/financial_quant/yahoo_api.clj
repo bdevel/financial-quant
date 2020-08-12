@@ -49,7 +49,7 @@
                                    body (:body response)]
                                ;;(write-in-db (assoc {} cache-key body))
                                (cache/write-daily cache-key body)
-                               (println "fetching:" url params)
+                               (println "Fetching: " url params)
                                body)))]
      data))
 
@@ -93,24 +93,36 @@
                          sorted-items)]
       acc-score))
 
-(defn fill-strikes-with-prev
+(defn fill-strikes-and-expirations
   "Assuming all contracts have the same expiration, start at lowest strike, if a strike missing then use the previous value of attr to fill gap."
-  [contracts all-strikes attr]
+  [contracts]
   (let [;;sorted-items (sort-by :strike contracts)
-        strike-table (reduce (fn [a i] (assoc a (:strike i) i)) 
-                             {}
-                             contracts)
-        filled-table (reduce (fn [a s]
-                               (assoc a s (get strike-table s))) 
-                             {}
-                             all-strikes)
+        all-strikes (distinct (map :strike contracts))
+        all-expirations (distinct (map :expiration contracts))
+
+        existing (reduce (fn [acc c]
+                           (assoc-in acc [(:strike c) (:expiration c)] true))
+                         {} contracts)
+        all-combos (mapcat (fn [s]
+                                    (map (fn [x]
+                                           (vector s x))
+                                         all-expirations))
+                                  all-strikes)
+        missing (reduce (fn [acc [strike exp]]
+                          (if (get-in existing [strike exp])
+                            acc
+                            (conj acc {:strike strike :expiration exp
+                                       :open-interest 0})))
+                        (list)
+                        all-combos)
+        
         ]
-    nil))
+    (into contracts missing)))
 
 (comment
-  (fill-strikes-with-prev [{:strike 1 :v 10}
-                           {:strike 2 :v 20}]
-                          [1 2 3 4])
+  (fill-strikes-and-expirations [{:strike 1 :expiration 10}
+                                 {:strike 2 :expiration 20}]
+                          )
   )
 
 (defn acc-open-interest-by-expiration
@@ -129,7 +141,7 @@
 (defn accumulate-open-interest
   "Will update :calls with :total-open-interest which is the sum of all previous :expirations where :strike price is greater than the current item."
   [data]
-  (let [calls (:calls data)
+  (let [calls  (fill-strikes-and-expirations (:calls data))
         groups (group-by :strike calls)
         v1     (apply concat [] (map acc-open-interest (vals groups)))
         v2     (apply concat [] (map acc-open-interest-by-expiration (vals (group-by :expiration v1))))]

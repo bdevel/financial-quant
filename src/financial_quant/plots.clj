@@ -44,8 +44,8 @@
                             :y     {:field :strike, :type "ordinal" :sort "descending" },
                            ;;:y     {:field :strike, :type "quantitative" :sort "ascending" :bin {:maxbins n-strikes }},
 
-                           :x     {:field :expiration, :type "ordinal"} ;; :timeUnit timeunit :bin false :axis {:labelAngle 90 :title "Expiration" }},
-                           ;;:x     {:field :expiration, :type "temporal" :timeUnit timeunit :bin false :axis {:labelAngle 90 :title "Expiration" }},
+                           ;;:x     {:field :expiration, :type "ordinal"} ;; :timeUnit timeunit :bin false :axis {:labelAngle 90 :title "Expiration" }},
+                           :x     {:field :expiration, :type "temporal" :timeUnit timeunit :bin false :axis {:labelAngle 90 :title "Expiration" }},
                            
                            :color {:field :total-open-interest, :type "quantitative"}
                            ;;:color {:aggregate "sum", :field :total-open-interest, :type "quantitative"}
@@ -95,8 +95,8 @@
                            :y     {:field :strike, :type "ordinal" :sort "descending" },
                            ;;:y     {:field :strike, :type "quantitative" :sort "ascending" :bin {:maxbins n-strikes }},
 
-                           ;;:x     {:field :expiration, :type "temporal" :timeUnit timeunit :bin false :axis {:labelAngle 90 :title "Expiration" }},
-                           :x     {:field :expiration, :type "ordinal" };;:timeUnit timeunit :bin false :axis {:labelAngle 90 :title "Expiration" }},
+                           :x     {:field :expiration, :type "temporal" :timeUnit timeunit :bin false :axis {:labelAngle 90 :title "Expiration" }},
+                           ;;:x     {:field :expiration, :type "ordinal" };;:timeUnit timeunit :bin false :axis {:labelAngle 90 :title "Expiration" }},
                            
                            ;;:color {:aggregate "sum", :field :open-interest, :type "quantitative"}
                            :color {:field :open-interest, :type "quantitative"}
@@ -178,18 +178,8 @@
 
 
 
-
-
-(comment
-
-  
-
-  
-  )
-
-
 (let [open-interest-data  (-> (yahoo-api/full-option-chain "TSLA")
-                              (yahoo-api/limit-strikes 50)
+                              ;;(yahoo-api/limit-strikes 100)
                               (yahoo-api/accumulate-open-interest))
       total-interest-plot (make-total-open-interest-heatmap open-interest-data)
       open-interest-plot  (make-open-interest-heatmap open-interest-data)]
